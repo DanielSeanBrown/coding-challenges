@@ -1,0 +1,72 @@
+# available at https://edabit.com/challenge/XQwPPHE6ZSu4Er9ht 
+
+def is_prime(num):
+
+    '''check if a number is prime'''
+
+    if num in [0, 1]:
+        return False
+    else:
+        for divisor in range(2, num // 2 + 1):
+            if num % divisor == 0:
+                return False
+    return True
+
+def get_prime_factors(n):
+
+    '''returns a list of tuples showing factors and exponents.
+    assumes that n is at least 1'''
+
+    prime_factors = []
+    while n != 1:
+        for factor in range(1, n + 1):
+            exponent = 0
+            if n % factor == 0:
+                if is_prime(factor):
+                    while n % factor == 0:
+                        n //= factor
+                        exponent += 1
+            if exponent:
+                if exponent > 1:
+                    prime_factors.append((factor, exponent))
+                else:
+                    prime_factors.append((factor,))
+    return prime_factors
+                    
+
+def is_economical(n):
+
+    '''given a number, gives it a rating depending on how its digit length
+    compares to the length of its prime factors including exponents'''
+    
+    digit_length = len(str(n))
+    prime_factors = get_prime_factors(n)
+    factor_length = 0
+
+    # count factor/exponent length
+    for factor_exponent_pair in prime_factors:
+        for item in factor_exponent_pair:
+            factor_length += len(str(item))
+
+    # return relevant rating
+    if digit_length == factor_length:
+        return 'Equidigital'
+    elif digit_length > factor_length:
+        return 'Frugal'
+    else:
+        return 'Wasteful'
+
+
+assert is_economical(14) == "Equidigital"
+assert is_economical(125) == "Frugal"
+assert is_economical(1024) == "Frugal"
+assert is_economical(30) == "Wasteful"
+assert is_economical(81) == "Equidigital"
+assert is_economical(243) == "Frugal"
+assert is_economical(5) == "Equidigital"
+assert is_economical(6) == "Wasteful"
+assert is_economical(1267) == "Equidigital"
+assert is_economical(1701) == "Frugal"
+assert is_economical(1267) == "Equidigital"
+assert is_economical(12871) == "Equidigital"
+assert is_economical(88632) == "Wasteful"
